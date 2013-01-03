@@ -43,7 +43,11 @@ The application calls scripts, and will parse the JSON output to generate its us
 
 ### Commands
 
-The application will create a table with a title defined by the 'title' attribute, and whose rows will be defined by the 'values' attribute. Touching one of these rows will launch the command. the command launched might not be a script stored in `.pilotssh`: any other script path (or script that can be found on the PATH) can be used, as long as it echoes a JSON text compatible with this API.
+The application will create a table with a title defined by the 'title' attribute, and whose rows will be defined by the 'values' attribute.
+
+Each row will display a text defined by 'name', and an optional subtext defined by 'value'. If the 'command' attribute is empty, the row is displayed with a flat background. If it is not empty, the row will be displayed as a button, and touching it will execute the command on the server, to retrieve another JSON response.
+
+The command launched might not be a script stored in `.pilotssh`: any other script path (or script that can be found on the PATH) can be used, as long as it echoes a JSON text compatible with this API.
 
 ### Status
 
