@@ -47,6 +47,8 @@ The application will create a table with a title defined by the 'title' attribut
 
 Each row will display a text defined by 'name', and an optional subtext defined by 'value'. If the 'command' attribute is empty, the row is displayed with a flat background. If it is not empty, the row will be displayed as a button, and touching it will execute the command on the server, to retrieve another JSON response.
 
+If the 'query' attribute is set, the application will display an alert box with a text field and a label defined by the 'query' attribute. The content of the text field will be concatenated to the command string before sending it to the server.
+
 The command launched might not be a script stored in `.pilotssh`: any other script path (or script that can be found on the PATH) can be used, as long as it echoes a JSON text compatible with this API.
 
 ### Status
