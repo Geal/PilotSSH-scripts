@@ -1,5 +1,3 @@
 #!/bin/bash
 
-ta=`tail /var/log/apache2/access.log`
-t4=`echo $ta | base64 -w 0`
-echo "{ \"version\": 1, \"title\": \"Apache access.log\", \"type\":\"text\", \"status\":\"ok\", \"text\":\"$t4\"}"
+echo '{ "version": 1, "title": "Commands", "type":"commands", "values" : [ {"name" : "Apache access", "value" : "", "command" : ".pilotssh/logs/logs_show.sh \"Apache access.log\" apache2/access.log" }, {"name" : "Apache error", "value" : "", "command" : ".pilotssh/logs/logs_show.sh \"Apache error.log\" apache2/error.log" }, {"name" : "Auth", "value" : "", "command" : ".pilotssh/logs/logs_show.sh \"Auth.log\" auth.log" }, {"name" : "Syslog", "value" : "", "command" : ".pilotssh/logs/logs_show.sh \"Syslog\" syslog" } ] }';
