@@ -178,13 +178,13 @@ function restoreDB($version) {
       $arr = explode(".", $files[2]);
       $time = $arr[0];
       $date = date('Y-m-d G:i:s', $time);
-      echo '{"name" : "'.$date.'", "value":"", "command":".pilotssh/wordpress/wordpress.php restore '.$backup_path.'sql/'.$files[2].'"}';
+      echo '{"name" : "'.$date.'", "value":"", "command":".pilotssh/wordpress/wordpress.php restoredb '.$backup_path.'sql/'.$files[2].'"}';
     }
     for($i = 3; $i < count($files); $i++) {
       $arr = explode(".", $files[$i]);
       $time = $arr[0];
       $date = date('Y-m-d G:i:s', $time);
-      echo ', {"name" : "'.$date.'", "value":"", "command":".pilotssh/wordpress/wordpress.php restore '.$backup_path.'sql/'.$files[$i].'"}';
+      echo ', {"name" : "'.$date.'", "value":"", "command":".pilotssh/wordpress/wordpress.php restoredb '.$backup_path.'sql/'.$files[$i].'"}';
     }
     echo '] }';
   }else {
