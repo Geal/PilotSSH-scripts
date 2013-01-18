@@ -49,12 +49,34 @@ function checkWPVersion($wp_path) {
   return $wp_version;
 }
 
+function getBlogName() {
+  global $path;
+  require_once($path."wp-config.php");
+  $conn = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD);
+  mysql_select_db(DB_NAME, $conn);
+  if (! mysql_set_charset (DB_CHARSET, $conn)) {
+    mysql_query('SET NAMES '.DB_CHARSET);
+  }
+  $result = mysql_query("SELECT option_value FROM wp_options WHERE option_name='blogname'");
+  $row = mysql_fetch_row($result);
+  mysql_close($conn);
+  return $row[0];
+}
+
 function info() {
   global $path;
   $wp_version = checkWPVersion($path);
+  $latest = latestVersion();
   $db_count = countDBBackups();
   $files_count = countFilesBackups();
-  echo '{ "version": 1, "title": "Wordpress", "type":"commands", "values" : [ {"name": "coincoin.com", "value": "v'.$wp_version.'", "command": ""}, {"name" : "Backup database", "value" : "", "command" : ".pilotssh/wordpress/wordpress.php backup" }, {"name" : "Restore database", "value" : "'.$db_count.' backups", "command" : ".pilotssh/wordpress/wordpress.php restoredb" }, {"name" : "Restore files", "value" : "'.$files_count.' backups", "command" : ".pilotssh/wordpress/wordpress.php restore" }, {"name": "Upgrade to '.latestVersion().'", "value": "", "command": ".pilotssh/wordpress/wordpress.php upgrade"} ] }';
+  $name = getBlogName();
+  echo '{ "version": 1, "title": "Wordpress", "type":"commands", "values" : [ {"name": "'.$name.'", "value": "v'.$wp_version.'", "command": ""}, {"name" : "Backup database", "value" : "", "command" : ".pilotssh/wordpress/wordpress.php backup" }, {"name" : "Restore database", "value" : "'.$db_count.' backups", "command" : ".pilotssh/wordpress/wordpress.php restoredb" }, {"name" : "Restore files", "value" : "'.$files_count.' backups", "command" : ".pilotssh/wordpress/wordpress.php restore" }, ';
+
+  if($wp_version == $latest) {
+    echo '{"name": "Up to date", "value": "", "command": ""} ] }';
+  } else {
+    echo '{"name": "Upgrade to '.$latest.'", "value": "", "command": ".pilotssh/wordpress/wordpress.php upgrade"} ] }';
+  }
 }
 
 function config($conf_path, $conf_backup_path) {
@@ -68,9 +90,18 @@ function config($conf_path, $conf_backup_path) {
     file_put_contents('.pilotssh/wordpress/config.php', $str);
 
     $path = $conf_path;
+    $wp_version = checkWPVersion($path);
+    $latest = latestVersion();
     $db_count = countDBBackups();
     $files_count = countFilesBackups();
-    echo '{ "version": 1, "title": "Wordpress", "type":"commands", "values" : [ {"name": "coincoin.com", "value": "v'.$wp_version.'", "command": ""}, {"name" : "Backup database", "value" : "", "command" : ".pilotssh/wordpress/wordpress.php backup" }, {"name" : "Restore database", "value" : "'.$db_count.' backups", "command" : ".pilotssh/wordpress/wordpress.php restoredb" }, {"name" : "Restore files", "value" : "'.$files_count.' backups", "command" : ".pilotssh/wordpress/wordpress.php restore" }, {"name": "Upgrade to '.latestVersion().'", "value": "", "command": ".pilotssh/wordpress/wordpress.php upgrade"} ] }';
+    $name = getBlogName();
+    echo '{ "version": 1, "title": "Wordpress", "type":"commands", "values" : [ {"name": "'.$name.'", "value": "v'.$wp_version.'", "command": ""}, {"name" : "Backup database", "value" : "", "command" : ".pilotssh/wordpress/wordpress.php backup" }, {"name" : "Restore database", "value" : "'.$db_count.' backups", "command" : ".pilotssh/wordpress/wordpress.php restoredb" }, {"name" : "Restore files", "value" : "'.$files_count.' backups", "command" : ".pilotssh/wordpress/wordpress.php restore" }, ';
+
+    if($wp_version == $latest) {
+      echo '{"name": "Up to date", "value": "", "command": ""} ] }';
+    } else {
+      echo '{"name": "Upgrade to '.$latest.'", "value": "", "command": ".pilotssh/wordpress/wordpress.php upgrade"} ] }';
+    }
   }
 }
 
