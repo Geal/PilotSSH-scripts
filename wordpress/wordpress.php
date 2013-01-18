@@ -146,13 +146,13 @@ function restoreDB($version) {
     if(count($files) >= 3) {
       $arr = explode(".", $files[2]);
       $time = $arr[0];
-      $date = date('Y-m-d G:I:s', $time);
+      $date = date('Y-m-d G:i:s', $time);
       echo '{"name" : "'.$date.'", "value":"", "command":".pilotssh/wordpress/wordpress.php restore '.$backup_path.'sql/'.$files[2].'"}';
     }
     for($i = 3; $i < count($files); $i++) {
       $arr = explode(".", $files[$i]);
       $time = $arr[0];
-      $date = date('Y-m-d G:I:s', $time);
+      $date = date('Y-m-d G:i:s', $time);
       echo ', {"name" : "'.$date.'", "value":"", "command":".pilotssh/wordpress/wordpress.php restore '.$backup_path.'sql/'.$files[$i].'"}';
     }
     echo '] }';
@@ -191,12 +191,12 @@ function restoreFiles($version) {
     $files = scandir("$backup_path/files/");
     echo '{ "version": 1, "title": "Restore files", "type":"commands", "values" : [ ';
     if(count($files) >= 3) {
-      $date = date('Y-m-d G:I:s', $files[2]);
+      $date = date('Y-m-d G:i:s', $files[2]);
       $v = checkWPVersion("$backup_path/files/".$files[2]."/");
       echo '{"name" : "'.$date.'", "value":"v'.$v.'", "command":".pilotssh/wordpress/wordpress.php restore '.$backup_path.'files/'.$files[2].'"}';
     }
     for($i = 3; $i < count($files); $i++) {
-      $date = date('Y-m-d G:I:s', $files[$i]);
+      $date = date('Y-m-d G:i:s', $files[$i]);
       $v = checkWPVersion("$backup_path/files/".$files[$i]."/");
       echo ', {"name" : "'.$date.'", "value":"v'.$v.'", "command":".pilotssh/wordpress/wordpress.php restore '.$backup_path.'files/'.$files[$i].'"}';
     }
