@@ -3,9 +3,8 @@
 <?php
 
 require_once("config.php");
-
-if($path == "") {
-  echo '{ "version": 1, "title": "Wordpress", "type":"commands", "values" : [ {"name": "Please configure the script", "value": "", "command": ""} ] }';
+if($path == "" && $backup_path == "" && $argv[1] != "config") {
+  echo '{ "version": 1, "title": "Wordpress", "type":"commands", "values" : [ {"name": "Please configure the script", "value": "", "command" : ".pilotssh/wordpress/wordpress.php config", "query": "Please enter the path of your WordPress website"} ] }';
 }
 
 define('ABSPATH', $path);
@@ -30,6 +29,9 @@ switch($argv[1]) {
   case "upgrade":
     upgrade();
     break;
+  case "config":
+    config($argv[2], $argv[3]);
+    break;
   case "info":
   default:
     info();
@@ -52,7 +54,24 @@ function info() {
   $wp_version = checkWPVersion($path);
   $db_count = countDBBackups();
   $files_count = countFilesBackups();
-echo '{ "version": 1, "title": "Wordpress", "type":"commands", "values" : [ {"name": "coincoin.com", "value": "v'.$wp_version.'", "command": ""}, {"name" : "Backup database", "value" : "", "command" : ".pilotssh/wordpress/wordpress.php backup" }, {"name" : "Restore database", "value" : "'.$db_count.' backups", "command" : ".pilotssh/wordpress/wordpress.php restoredb" }, {"name" : "Restore files", "value" : "'.$files_count.' backups", "command" : ".pilotssh/wordpress/wordpress.php restore" }, {"name": "Upgrade to '.latestVersion().'", "value": "", "command": ".pilotssh/wordpress/wordpress.php upgrade"} ] }';
+  echo '{ "version": 1, "title": "Wordpress", "type":"commands", "values" : [ {"name": "coincoin.com", "value": "v'.$wp_version.'", "command": ""}, {"name" : "Backup database", "value" : "", "command" : ".pilotssh/wordpress/wordpress.php backup" }, {"name" : "Restore database", "value" : "'.$db_count.' backups", "command" : ".pilotssh/wordpress/wordpress.php restoredb" }, {"name" : "Restore files", "value" : "'.$files_count.' backups", "command" : ".pilotssh/wordpress/wordpress.php restore" }, {"name": "Upgrade to '.latestVersion().'", "value": "", "command": ".pilotssh/wordpress/wordpress.php upgrade"} ] }';
+}
+
+function config($conf_path, $conf_backup_path) {
+  global $path;
+  if($conf_backup_path == "") {
+    echo '{ "version": 1, "title": "Wordpress", "type":"commands", "values" : [ {"name": "Backup configuration", "value": "", "command" : ".pilotssh/wordpress/wordpress.php config '.$conf_path.'", "query": "Please enter the path of backups"} ] }';
+  } else {
+    $str = file_get_contents('.pilotssh/wordpress/config.php');
+    $str=str_replace('$path = "";', '$path = "'.$conf_path.'";',$str);
+    $str=str_replace('$backup_path = "";', '$backup_path = "'.$conf_backup_path.'";',$str);
+    file_put_contents('.pilotssh/wordpress/config.php', $str);
+
+    $path = $conf_path;
+    $db_count = countDBBackups();
+    $files_count = countFilesBackups();
+    echo '{ "version": 1, "title": "Wordpress", "type":"commands", "values" : [ {"name": "coincoin.com", "value": "v'.$wp_version.'", "command": ""}, {"name" : "Backup database", "value" : "", "command" : ".pilotssh/wordpress/wordpress.php backup" }, {"name" : "Restore database", "value" : "'.$db_count.' backups", "command" : ".pilotssh/wordpress/wordpress.php restoredb" }, {"name" : "Restore files", "value" : "'.$files_count.' backups", "command" : ".pilotssh/wordpress/wordpress.php restore" }, {"name": "Upgrade to '.latestVersion().'", "value": "", "command": ".pilotssh/wordpress/wordpress.php upgrade"} ] }';
+  }
 }
 
 function backup($backup_path) {

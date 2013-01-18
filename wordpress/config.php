@@ -1,5 +1,5 @@
 <?php
-$path = "/root/wordpress/";
+$path = "";
 //$path = "/home/test1/site/";
-$backup_path = "/root/backup/";
+$backup_path = "";
 ?>
