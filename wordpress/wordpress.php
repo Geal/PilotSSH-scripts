@@ -9,14 +9,13 @@ if($path == "") {
 }
 
 define('ABSPATH', $path);
-//error_reporting(0);
+error_reporting(0);
 
 if(!is_dir("$backup_path")) {
   mkdir("$backup_path");
 }
 
 $command = $argv[1];
-echo $version;
 
 switch($argv[1]) {
   case "backup":
@@ -163,6 +162,7 @@ function countDBBackups() {
 }
 
 function restoreFiles($version) {
+  global $path;
   global $backup_path;
   if(!is_dir("$backup_path/files/")) {
     mkdir("$backup_path/files/");
@@ -182,6 +182,10 @@ function restoreFiles($version) {
       echo ', {"name" : "'.$date.'", "value":"v'.$v.'", "command":".pilotssh/wordpress/wordpress.php restore '.$backup_path.'files/'.$files[$i].'"}';
     }
     echo '] }';
+  } else {
+    exec("rm -rf $path/* $path/.[^.] $path/.??*", $array, $return);
+    exec("cp -r $version/* $path");
+    msgSuccess("Restore files", "Done");
   }
 }
 
