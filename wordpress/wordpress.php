@@ -188,14 +188,24 @@ function restoreDB($version) {
     }
     echo '] }';
   }else {
-    $all_query = file_get_contents($version);
     $conn = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD);
     mysql_select_db(DB_NAME, $conn);
     if (! mysql_set_charset (DB_CHARSET, $conn)) {
       mysql_query('SET NAMES '.DB_CHARSET);
     }
+
+    $templine = '';
+    $lines = file($version);
+    foreach ($lines as $line) {
+      if (substr($line, 0, 2) == '--' || $line == '')
+        continue;
  
-    mysql_query(all_query);
+      $templine .= $line;
+      if (substr(trim($line), -1, 1) == ';') {
+        mysql_query($templine) or print('Error performing query \'<strong>' . $templine . '\': ' . mysql_error() . '<br /><br />');
+        $templine = '';
+      }
+    }
     mysql_close($conn);
     msgSuccess("Restore database", "Done restoring $version");
   }
