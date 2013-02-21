@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]
+then
+  echo '{ "version": 1, "title": "DNS", "type":"status", "status":"error", "message":"Please enter a domain" }';
+else
+  IFS=$'\n'$'\r'
+  arr=( $(host $1 2>/dev/null) );
+  if [ $? != 0 ]
+  then
+    echo '{ "version": 1, "title": "DNS", "type":"status", "status":"error", "message":"Please enter a valid domain" }';
+  else
+    echo "{ \"version\": 1, \"title\": \"DNS\", \"type\":\"commands\", \"values\" : [ { \"name\" : \"FQDN\", \"value\" : \"$1\", \"command\" : \"\"}";
+    for line in "${arr[@]}"; do
+      regex='has address (.*)'
+      if [[ "$line" =~ $regex ]] ; then echo ",{\"name\": \"IP\", \"value\":\"${BASH_REMATCH[1]}\"}"; fi
+      regex2='mail is handled by (.*)'
+      if [[ "$line" =~ $regex2 ]] ; then echo ",{\"name\": \"Mail\", \"value\":\"${BASH_REMATCH[1]}\"}"; fi
+      regex3='has IPv6 address (.*)'
+      if [[ "$line" =~ $regex3 ]] ; then echo ",{\"name\": \"IPv6\", \"value\":\"${BASH_REMATCH[1]}\"}"; fi
+    done
+    echo " ] }";
+  fi
+fi
