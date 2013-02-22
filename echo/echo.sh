@@ -1,3 +1,8 @@
 #!/bin/sh
 
-echo "{ \"version\": 1, \"title\": \"Echo\", \"type\":\"commands\", \"values\" : [ { \"name\" : \"Echo\", \"value\" : \"$1\", \"command\" : \"\"} ] }";
+if [ "$#" -ne 1 ]
+then
+  echo '{ "version": 1, "title": "Echo", "type":"status", "status":"error", "message":"Please enter something" }';
+else
+  echo "{ \"version\": 1, \"title\": \"Echo\", \"type\":\"commands\", \"values\" : [ { \"name\" : \"Echo\", \"value\" : \"$1\", \"command\" : \"\"} ] }";
+fi
