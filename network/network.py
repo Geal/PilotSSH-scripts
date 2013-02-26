@@ -1,5 +1,9 @@
 #!/usr/bin/python
-import netifaces, sys
+try:
+    import netifaces, sys
+except ImportError:
+    print '{ "version": 1, "title": "Network", "type":"status", "status":"error", "message":"Please install the netifaces Python module to use this script" }'
+    exit()
 
 def command_from_interface(intf):
     return '{ "name" : "' + intf + '", "value" : "'+ netifaces.ifaddresses(intf)[netifaces.AF_INET][0]["addr"] + '", "command" : ".pilotssh/network/network.py ' + intf + '" }'
