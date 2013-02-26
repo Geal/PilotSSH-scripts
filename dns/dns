@@ -38,7 +38,7 @@ else
     arr=( $(dig $1 TXT 2>/dev/null) );
     for line in "${arr[@]}"; do
       regex="^$1.*TXT[[:space:]]*(.*)"
-      if [[ "$line" =~ $regex ]] ; then echo ",{\"name\": \"TXT\", \"value\":\"${BASH_REMATCH[1]}\"}"; fi
+      if [[ "$line" =~ $regex ]] ; then txt=$(echo ${BASH_REMATCH[1]} | sed 's/"/\\"/g'); echo ",{\"name\": \"TXT\", \"value\":\"${txt[@]}\"}"; fi
     done
     echo " ] }";
   fi
