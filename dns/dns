@@ -5,19 +5,35 @@ then
   echo '{ "version": 1, "title": "DNS", "type":"status", "status":"error", "message":"Please enter a domain" }';
 else
   IFS=$'\n'$'\r'
-  arr=( $(host $1 2>/dev/null) );
+  arr=( $(dig $1 2>/dev/null) );
   if [ $? != 0 ]
   then
     echo '{ "version": 1, "title": "DNS", "type":"status", "status":"error", "message":"Please enter a valid domain" }';
   else
     echo "{ \"version\": 1, \"title\": \"DNS\", \"type\":\"commands\", \"values\" : [ { \"name\" : \"FQDN\", \"value\" : \"$1\", \"command\" : \"\"}";
     for line in "${arr[@]}"; do
-      regex='has address (.*)'
-      if [[ "$line" =~ $regex ]] ; then echo ",{\"name\": \"IP\", \"value\":\"${BASH_REMATCH[1]}\"}"; fi
-      regex2='mail is handled by (.*)'
-      if [[ "$line" =~ $regex2 ]] ; then echo ",{\"name\": \"Mail\", \"value\":\"${BASH_REMATCH[1]}\"}"; fi
-      regex3='has IPv6 address (.*)'
-      if [[ "$line" =~ $regex3 ]] ; then echo ",{\"name\": \"IPv6\", \"value\":\"${BASH_REMATCH[1]}\"}"; fi
+      regex="^$1.*A[[:space:]]*(.*)"
+      if [[ "$line" =~ $regex ]] ; then echo ",{\"name\": \"A\", \"value\":\"${BASH_REMATCH[1]}\"}"; fi
+    done
+    arr=( $(dig $1 AAAA 2>/dev/null) );
+    for line in "${arr[@]}"; do
+      regex="^$1.*AAAA[[:space:]]*(.*)"
+      if [[ "$line" =~ $regex ]] ; then echo ",{\"name\": \"AAAA\", \"value\":\"${BASH_REMATCH[1]}\"}"; fi
+    done
+    arr=( $(dig $1 MX 2>/dev/null) );
+    for line in "${arr[@]}"; do
+      regex="^$1.*MX[[:space:]]*(.*)"
+      if [[ "$line" =~ $regex ]] ; then echo ",{\"name\": \"MX\", \"value\":\"${BASH_REMATCH[1]}\"}"; fi
+    done
+    arr=( $(dig $1 NS 2>/dev/null) );
+    for line in "${arr[@]}"; do
+      regex="^$1.*NS[[:space:]]*(.*)"
+      if [[ "$line" =~ $regex ]] ; then echo ",{\"name\": \"NS\", \"value\":\"${BASH_REMATCH[1]}\"}"; fi
+    done
+    arr=( $(dig $1 TXT 2>/dev/null) );
+    for line in "${arr[@]}"; do
+      regex="^$1.*TXT[[:space:]]*(.*)"
+      if [[ "$line" =~ $regex ]] ; then echo ",{\"name\": \"TXT\", \"value\":\"${BASH_REMATCH[1]}\"}"; fi
     done
     echo " ] }";
   fi
