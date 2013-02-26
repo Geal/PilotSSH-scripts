@@ -20,6 +20,11 @@ else
       regex="^$1.*AAAA[[:space:]]*(.*)"
       if [[ "$line" =~ $regex ]] ; then echo ",{\"name\": \"AAAA\", \"value\":\"${BASH_REMATCH[1]}\"}"; fi
     done
+    arr=( $(dig $1 PTR 2>/dev/null) );
+    for line in "${arr[@]}"; do
+      regex="^$1.*PTR[[:space:]]*(.*)"
+      if [[ "$line" =~ $regex ]] ; then echo ",{\"name\": \"PTR\", \"value\":\"${BASH_REMATCH[1]}\"}"; fi
+    done
     arr=( $(dig $1 MX 2>/dev/null) );
     for line in "${arr[@]}"; do
       regex="^$1.*MX[[:space:]]*(.*)"
