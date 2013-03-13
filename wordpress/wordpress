@@ -3,8 +3,8 @@
 <?php
 
 require_once("config.php");
-if($path == "" && $backup_path == "" && $argv[1] != "config") {
-  echo '{ "version": 1, "title": "Wordpress", "type":"commands", "values" : [ {"name": "Please configure the script", "value": "", "command" : ".pilotssh/wordpress/wordpress config", "query": "Please enter the path of your WordPress website"} ] }';
+if($path == "" && $backup_path == "" && $argc == 1) {
+  echo '{ "version": 1, "title": "Wordpress", "values" : [ {"name": "Please configure the script", "value": "", "command" : ".pilotssh/wordpress/wordpress config", "query": "Please enter the path of your WordPress website"}], "type":"commands" }';
 }
 
 define('ABSPATH', $path);
