@@ -1,3 +1,17 @@
 #!/bin/bash
 
-echo '{ "version": 1, "title": "Commands", "type":"commands", "values" : [ {"name" : "Process list", "value" : "", "command" : ".pilotssh/process/process.sh" }, {"name" : "Apache services", "value" : "", "command" : ".pilotssh/apache/apache.sh" }, { "name" : "Logs", "value" : "", "command" : ".pilotssh/logs/logs.sh"}, { "name" : "Power", "value" : "", "command" : ".pilotssh/power/power.sh"}, {"name" : "Echo", "value" : "", "command" : ".pilotssh/echo/echo.sh", "query": "Echo?" },{ "name" : "WordPress", "value" : "", "command" : ".pilotssh/wordpress/wordpress.php"}, { "name" : "Network interfaces", "value" : "", "command" : ".pilotssh/network/network.py"}, {"name": "DNS", "value":"", "command": ".pilotssh/dns/dns", "query": "Enter a domain"} ] }';
+dirs=( $(find * -type d | sort) )
+
+result='{ "version": 1, "title": "Commands", "type":"commands", "values" : ['
+first=$dirs
+result=$result"{\"name\":\"$first\", \"value\":\"\", \"command\":\".pilotssh/$first/$first\" }"
+unset dirs[0]
+
+for dir in "${dirs[@]}"; do
+  result=$result", {\"name\":\"$dir\", \"value\":\"\", \"command\":\".pilotssh/$dir/$dir\"}"
+done
+
+result=$result" ]}"
+
+echo $result
+

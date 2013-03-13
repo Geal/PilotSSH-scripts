@@ -18,7 +18,7 @@ result=$result"{\"name\":\"$path\", \"value\":\"\", \"command\":\"\"}"
 
 
 for dir in "${dirs[@]}"; do
-  result=$result", {\"name\":\"$dir\", \"value\":\"\", \"command\":\".pilotssh/logs/logs.sh $dir\"}"
+  result=$result", {\"name\":\"$dir\", \"value\":\"\", \"command\":\".pilotssh/logs/logs $dir\"}"
 done
 
 for file in "${files[@]}"; do

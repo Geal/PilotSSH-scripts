@@ -6,7 +6,7 @@ except ImportError:
     exit()
 
 def command_from_interface(intf):
-    return '{ "name" : "' + intf + '", "value" : "'+ netifaces.ifaddresses(intf)[netifaces.AF_INET][0]["addr"] + '", "command" : ".pilotssh/network/network.py ' + intf + '" }'
+    return '{ "name" : "' + intf + '", "value" : "'+ netifaces.ifaddresses(intf)[netifaces.AF_INET][0]["addr"] + '", "command" : ".pilotssh/network/network ' + intf + '" }'
 
 def index():
     result = '{ "version": 1, "title": "Network Interfaces", "type":"commands", "values" : [ '
