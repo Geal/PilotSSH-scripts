@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd ~/.pilotssh
 dirs=( $(find * -type d | sort) )
 
 result='{ "version": 1, "title": "Commands", "type":"commands", "values" : ['
