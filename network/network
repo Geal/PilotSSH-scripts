@@ -11,7 +11,7 @@ def command_from_interface(intf):
     for key in ifaddresses.keys():
         info = ifaddresses[key]
         for index in info:
-            result.append('{ "name" : "' + intf + '", "value" : "'+ index["addr"] + '", "command" : ".pilotssh/network/network.py ' + intf + '" }')
+            result.append('{ "name" : "' + intf + '", "value" : "'+ index["addr"] + '", "command" : ".pilotssh/network/network ' + intf + '" }')
     return result
 
 def index():
