@@ -1,18 +1,4 @@
 #!/bin/bash
 
-cd ~/.pilotssh
-dirs=( $(find * -type d | sort) )
-
-result='{ "version": 1, "title": "Commands", "type":"commands", "values" : ['
-first=$dirs
-result=$result"{\"name\":\"$first\", \"value\":\"\", \"command\":\".pilotssh/$first/$first\" }"
-unset dirs[0]
-
-for dir in "${dirs[@]}"; do
-  result=$result", {\"name\":\"$dir\", \"value\":\"\", \"command\":\".pilotssh/$dir/$dir\"}"
-done
-
-result=$result" ]}"
-
-echo $result
+echo '{ "version": 1, "title": "Commands", "type":"commands", "values" : [{"name":"DNS", "value":"", "command":".pilotssh/dns/dns", "query":"Enter a domain" }, {"name":"Apache", "value":"", "command":".pilotssh/apache/apache"}, {"name":"Logs", "value":"", "command":".pilotssh/logs/logs"}, {"name":"Network", "value":"", "command":".pilotssh/network/network"}, {"name":"Power", "value":"", "command":".pilotssh/power/power"}, {"name":"Process", "value":"", "command":".pilotssh/process/process"}, {"name":"System", "value":"", "command":".pilotssh/system/system"} ]}'
 
