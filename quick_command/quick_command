@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# Small shell script to enter custom commands and see the text result
 res=`$1`;
 encoded=`echo "$res" | base64 -w 0`
 echo "{ \"version\": 1, \"title\": \"Result\", \"type\":\"text\", \"status\":\"ok\", \"text\":\"$encoded\"}"
