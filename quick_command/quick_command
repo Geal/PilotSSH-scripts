@@ -1,0 +1,5 @@
+#!/bin/sh
+
+res=`$1`;
+encoded=`echo "$res" | base64 -w 0`
+echo "{ \"version\": 1, \"title\": \"Result\", \"type\":\"text\", \"status\":\"ok\", \"text\":\"$encoded\"}"
