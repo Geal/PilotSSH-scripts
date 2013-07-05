@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 available=(/etc/apache2/sites-available/*)
 parsedAvailable=()
 enabled=(/etc/apache2/sites-enabled/*)

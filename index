@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 cd ~/.pilotssh;
 
 result='{ "version": 1, "title": "Commands", "type":"commands", "values" : ['

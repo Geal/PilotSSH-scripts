@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 result="{ \"version\": 1, \"title\": \"$2\", \"type\":\"commands\", \"values\" : [ "
 
