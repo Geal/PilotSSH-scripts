@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 # Small shell script to enter custom commands and see the text result
 res=`$1`;

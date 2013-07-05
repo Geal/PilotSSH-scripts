@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 reboot > /dev/null 2>&1
 OUT=$?
 if [ $OUT -eq 0 ];then
