@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ta=`tail -n 100 $1`
 t4=`echo "$ta" | base64 -w 0`

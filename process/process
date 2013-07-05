@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 result="{ \"version\": 1, \"title\": \"Processes\", \"type\":\"commands\", \"values\" : [ "
 
