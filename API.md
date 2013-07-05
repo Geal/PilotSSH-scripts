@@ -57,5 +57,5 @@ The application will display an alertbox, with the title defined by the 'title' 
 
 ### Text
 
-The application will display a large text zone, with the title defined by the 'title' attribute, and the content defined by the 'text' attribute.
+The application will display a large text zone, with the title defined by the 'title' attribute, and the content defined by the 'text' attribute. The 'text' attribute must contain base64 encoded data without wrap-around. Passing the text through the command `base64 -w 0` encodes it correctly.
 
