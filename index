@@ -12,7 +12,9 @@ do
     else
       result=$result",";
     fi
-    cmd=`cat $entry/command.json`
+    if [ -f "$entry/command.json" ];then
+    	cmd=`cat $entry/command.json`
+    fi
     result=$result$cmd
   fi
 done
