@@ -13,9 +13,9 @@ do
       result=$result",";
     fi
     if [ -f "$entry/command.json" ];then
-    	cmd=`cat $entry/command.json`
+      cmd=`cat $entry/command.json`
+      result=$result$cmd
     fi
-    result=$result$cmd
   fi
 done
 
