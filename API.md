@@ -39,6 +39,50 @@ The application calls scripts, and will parse the JSON output to generate its us
   * *command*: the command that will be launched if the row is touched by the user
 * *text*: define a large block of text that will be displayed. It must be present for the 'text' responses
 
+### Graphs
+
+Here is how a command output looks like to display a graph:
+
+```json
+{
+  "version" : 1,
+  "title"   : "Index",
+  "type"    : "commands",
+  "status"  : "",
+  "message" : "",
+  "values"  : [
+    {
+      "name" : "Graph",
+      "value" : "",
+      "command" : "",
+      "domain": "time (mn)",
+      "range": "measured",
+      "graph": "lineplot",
+      "series":[
+        {
+          "label":"vals1",
+          "values":[0, 1, 1, 2, 2, 0, 3, 5]
+        },
+        {
+          "label":"vals2",
+          "values":[0, 3, 1, 1, 2, 7, 3, 6]
+        }
+      ]
+    }
+  ],
+}
+```
+
+All of the graph related keys are optional, you do not need them for normal commands:
+
+* *domain*: the domain tag
+* *range*: the range tag
+* *graph*: the graph type, can be lineplot or barplot
+* *series*: an array of number series that will be displayed on the same graph
+  * *label*: the name corresponding to the serie's color in the legend
+  * *values*: the values to display. The X and Y values are alterned in that way: [x1, y1, x2, y2, ...]
+
+The colors on the graphs are generated automatically and depend on the number of series, and the order in which they appear
 ## Response types
 
 ### Commands
@@ -58,4 +102,3 @@ The application will display an alertbox, with the title defined by the 'title' 
 ### Text
 
 The application will display a large text zone, with the title defined by the 'title' attribute, and the content defined by the 'text' attribute. The 'text' attribute must contain base64 encoded data without wrap-around. Passing the text through the command `base64 -w 0` encodes it correctly.
-
