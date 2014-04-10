@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+usermode=()
+sys=()
+idle=()
+readarray GREPPED < <(grep 'cpu[[:digit:]]' /proc/stat)
+for item in "${GREPPED[@]}"
+do
+  vls=($item);
+  usermode+=(${vls[1]});
+  sys+=(${vls[3]});
+  idle+=(${vls[4]});
+done
+
+result='{ "version": 1, "title": "Instant CPU graphs", "type":"commands", "values" : [{"name":"CPU load", "value":"", "domain":"Cores", "range":"User_HZ", "graph":"barplot", "series":[';
+
+#result=$result"{\"label\":\"idle\", \"values\":[";
+#if [ ${#idle[*]} -gt 0 ]
+#then
+#  result=$result"0, ${idle[0]}"
+#fi
+#for ((i=1; i<${#idle[*]}; i++)); do
+#  result=$result", $i, ${idle[i]}"
+#done
+#result=$result"]}, ";
+
+result=$result"{\"label\":\"user\", \"values\":[";
+if [ ${#usermode[*]} -gt 0 ]
+then
+  result=$result"0, ${usermode[0]}"
+fi
+for ((i=1; i<${#usermode[*]}; i++)); do
+  result=$result", $i, ${usermode[i]}"
+done
+result=$result"]}, ";
+
+result=$result"{\"label\":\"sys\", \"values\":[";
+if [ ${#sys[*]} -gt 0 ]
+then
+  result=$result"0, ${sys[0]}"
+fi
+for ((i=1; i<${#sys[*]}; i++)); do
+  result=$result", $i, ${sys[i]}"
+done
+result=$result"]} ";
+
+result=$result"]}, ";
+
+procs=(/proc/[0-9]*);
+pids=();
+utimes=();
+stimes=();
+
+pids+=(`basename ${procs[0]}`);
+utimes+=($(awk '{print $13}' ${procs[0]}/stat));
+stimes+=($(awk '{print $14}' ${procs[0]}/stat));
+for ((i=1; i<${#procs[*]}; i++)); do
+  utime=$(awk '{print $13}' "${procs[$i]}/stat");
+  stime=$(awk '{print $14}' "${procs[$i]}/stat");
+  pids+=(`basename ${procs[$i]}`);
+  utimes+=($utime);
+  stimes+=($stime);
+  #echo "${pids[$i]} -> $utime -> $stime";
+done
+
+result=$result'{"name":"CPU usage by PID", "value":"", "domain":"PID", "range":"User_HZ", "graph":"barplot", "series":[';
+
+result=$result"{\"label\":\"user\", \"values\":[";
+if [ ${#utimes[*]} -gt 0 ]
+then
+  result=$result"${pids[0]}, ${utimes[0]}";
+fi
+for ((i=1; i<${#utimes[*]}; i++)); do
+  result=$result", ${pids[i]}, ${utimes[i]}";
+done
+result=$result"]}, ";
+
+result=$result"{\"label\":\"sys\", \"values\":[";
+if [ ${#stimes[*]} -gt 0 ]
+then
+  result=$result"${pids[0]}, ${stimes[0]}";
+fi
+for ((i=1; i<${#stimes[*]}; i++)); do
+  result=$result", ${pids[i]}, ${stimes[i]}";
+done
+result=$result"]}";
+
+result=$result"]}]}";
+echo $result;
